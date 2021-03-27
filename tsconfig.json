@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2020", "dom"],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "sourceMap": true,
+    "strict": true,
+    "types": ["vite/client", "node"],
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "declaration": true
+  }
+}
