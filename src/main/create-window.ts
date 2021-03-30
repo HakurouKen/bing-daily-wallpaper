@@ -11,14 +11,15 @@ const DEFAULT_WINDOW_OPTIONS = {
   autoHideMenuBar: true,
   trafficLightPosition: {
     x: 20,
-    y: 32,
+    y: 32
   },
   webPreferences: {
-    contextIsolation: true,
+    contextIsolation: false,
     devTools: isDev,
     spellcheck: false,
     nodeIntegration: true,
-  },
+    enableRemoteModule: true
+  }
 };
 
 export default function createWindow(
@@ -28,18 +29,17 @@ export default function createWindow(
 
   let windowState = windowStateKeeper({
     defaultWidth: windowOptions.minWidth,
-    defaultHeight: windowOptions.minHeight,
+    defaultHeight: windowOptions.minHeight
   });
 
-  let win: BrowserWindow;
-
-  win = new BrowserWindow({
+  const win: BrowserWindow = new BrowserWindow({
     ...windowOptions,
     x: windowState.x,
     y: windowState.y,
     width: windowState.width,
-    height: windowState.height,
+    height: windowState.height
   });
+
   windowState.manage(win);
 
   win.once('ready-to-show', () => {

@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
-import createWindow from './helpers/create-window';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import installExtension from 'electron-devtools-installer';
+import createWindow from './create-window';
+import './events';
 
 try {
   require('electron-reloader')(module);
@@ -11,6 +12,9 @@ const isDev = !app.isPackaged;
 let mainWindow: BrowserWindow | null;
 
 async function createMainWindow() {
+  if (mainWindow) {
+    return;
+  }
   mainWindow = createWindow();
   mainWindow.once('close', () => {
     mainWindow = null;
@@ -20,7 +24,7 @@ async function createMainWindow() {
   if (isDev) {
     await mainWindow.loadURL(`http://localhost:${port}`);
     try {
-      const name = await installExtension(VUEJS_DEVTOOLS);
+      const name = await installExtension('ljjemllljcmogpfapbkkighbhhppjdbg');
       console.log(`Load Extension: `, name);
     } catch (err) {
       console.error(`Error When load extension: `, err);
@@ -32,14 +36,4 @@ async function createMainWindow() {
 }
 
 app.once('ready', () => createMainWindow());
-app.on('activate', () => {
-  if (!mainWindow) {
-    createMainWindow();
-  }
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
+app.on('activate', () => createMainWindow());
