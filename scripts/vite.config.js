@@ -2,7 +2,7 @@ const { defineConfig } = require('vite');
 const path = require('path');
 const vue = require('@vitejs/plugin-vue');
 
-const root = path.join(__dirname, 'src/renderer');
+const root = path.join(__dirname, '..', 'src/renderer');
 
 module.exports = defineConfig({
   root,
@@ -12,7 +12,7 @@ module.exports = defineConfig({
   },
   base: './',
   build: {
-    outDir: path.join(__dirname, 'dist/renderer'),
+    outDir: path.join(__dirname, '..', 'dist/renderer'),
     emptyOutDir: true
   },
   resolve: {
@@ -22,6 +22,10 @@ module.exports = defineConfig({
   },
   plugins: [vue()],
   optimizeDeps: {
-    exclude: ['electron-window-state']
+    exclude: [
+      'electron-window-state',
+      'electron',
+      ...require('builtin-modules')
+    ]
   }
 });

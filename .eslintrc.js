@@ -4,6 +4,11 @@ module.exports = {
     browser: true,
     node: true
   },
-  extends: ['standard', 'prettier', 'plugin:prettier/recommended'],
+  extends: [
+    'standard',
+    'plugin:vue/vue3-recommended',
+    'prettier',
+    'plugin:prettier/recommended'
+  ],
   rules: {}
 };
