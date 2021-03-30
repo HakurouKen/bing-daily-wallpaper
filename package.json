@@ -25,6 +25,7 @@
     "element-plus": "^1.0.2-beta.35",
     "filenamify": "^4.2.0",
     "fs-extra": "^9.1.0",
+    "https-proxy-agent": "^5.0.0",
     "lodash": "^4.17.21",
     "node-cron": "^3.0.0",
     "normalize.css": "^8.0.1",
