@@ -1,4 +1,6 @@
-import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { IpcRendererEvent } from 'electron';
+// @Hack: Use `require` to skip vite bundle.
+const { ipcRenderer } = require('electron');
 
 function uuidV4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -10,7 +12,7 @@ function uuidV4() {
 
 class TimeoutError extends Error {
   constructor(timeout?: number, message?: string) {
-    let fullErrorMessage = `Error: request timeout`;
+    let fullErrorMessage = `request timeout`;
     if (timeout) {
       fullErrorMessage += ` of ${timeout}ms exceeded`;
     }
@@ -37,14 +39,13 @@ function callbackResolve(
   response: { id: string; error: Error | null; data: any }
 ) {
   const { id, error, data } = response;
-  if (listeners[channel]) {
+  if (!listeners[channel]) {
     return;
   }
   const { callbacks } = listeners[channel];
   const callback = callbacks.find((item) => item.id === id);
   if (!callback) {
-    // 如果回调 ID 匹配不上，舍弃
-    console.error(`Callback id mismatch: ${id}`);
+    // callback uuid mismatch
     return;
   }
   listeners[channel].callbacks = listeners[channel].callbacks.filter(
@@ -63,17 +64,17 @@ function addListener(channel: string) {
     return;
   }
   const listener = (
-    event: IpcRendererEvent,
+    event: Electron.IpcRendererEvent,
     response: { id: string; error: Error | null; data: any }
   ) => {
     callbackResolve(channel, event, response);
   };
   listeners[channel] = { listener, callbacks: [] };
-  ipcRenderer.on(channel, listener);
+  ipcRenderer.on(`promisify:${channel}`, listener);
   return listener;
 }
 
-function request(channel: string, data: any, timeout: number = 3000) {
+function request(channel: string, data?: any, timeout: number = 3000) {
   let _resolve: (value: any) => void = () => {};
   let _reject: (reason?: Error) => void = () => {};
   const done = new Promise((resolve, reject) => {
@@ -100,7 +101,7 @@ function request(channel: string, data: any, timeout: number = 3000) {
       });
     }, timeout);
   }
-  ipcRenderer.send(channel, { id, data });
+  ipcRenderer.send(`promisify:${channel}`, { id, data });
   return done;
 }
 
