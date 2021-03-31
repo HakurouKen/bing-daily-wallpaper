@@ -102,7 +102,7 @@ function request(channel: string, data?: any, timeout: number = 3000) {
     }, timeout);
   }
   ipcRenderer.send(`promisify:${channel}`, { id, data });
-  return done;
+  return done as Promise<{ id: string; event: IpcRendererEvent; data: any }>;
 }
 
 export { request };
