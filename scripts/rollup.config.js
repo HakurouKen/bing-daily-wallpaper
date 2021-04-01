@@ -1,5 +1,6 @@
 const path = require('path');
 const nodeExternals = require('rollup-plugin-node-externals');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const esbuild = require('rollup-plugin-esbuild');
 const alias = require('@rollup/plugin-alias');
@@ -18,6 +19,12 @@ module.exports = {
     nodeExternals(),
     commonjs(),
     json(),
+    alias({
+      entries: [{ find: '@', replacement: path.join(__dirname, '..', 'src') }],
+      customResolver: nodeResolve({
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+      })
+    }),
     esbuild({
       include: /\.[jt]sx?$/,
       exclude: /node_modules/,
@@ -29,13 +36,11 @@ module.exports = {
       define: {
         __VERSION__: '"x.y.z"'
       },
+      // tsconfig: path.resolve(__dirname, '..', 'tsconfig.json'),
       loaders: {
         '.json': 'json',
         '.js': 'jsx'
       }
-    }),
-    alias({
-      entries: [{ find: '@', replacement: path.join(__dirname, '../src') }]
     })
   ],
   external: [

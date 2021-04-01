@@ -1,6 +1,6 @@
 import { app, BrowserWindow, Menu, MenuItem, Tray } from 'electron';
 import installExtension from 'electron-devtools-installer';
-import config from '../shared/config';
+import config from '@/shared/config';
 import { update as updateWallpaper } from './wallpaper';
 import createWindow from './helpers/create-window';
 import './events';
