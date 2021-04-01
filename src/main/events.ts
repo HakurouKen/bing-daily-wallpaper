@@ -2,17 +2,20 @@ import Store from 'electron-store';
 import { update as updateWallpaper } from './wallpaper';
 import { setup } from './crons';
 import * as ipc from './helpers/promisify-ipc-main';
+import AutoLaunch from 'auto-launch';
 import {
   Settings,
   SetAutoLaunchRequest,
   SetAutoLaunchResponse,
   SetDailyUpdateTimeRequest,
   SetDailyUpdateTimeResponse,
-  GetRequest,
   GetResponse
 } from '@/shared/protos/settings';
 
 const store = new Store();
+const autoLauncher = new AutoLaunch({
+  name: 'Bing Daily Wallpaper'
+});
 
 const DEFAULT_DAILY_UPDATE_TIME = '00:15';
 
@@ -22,7 +25,11 @@ ipc.register(
     const settings = (store.get('settings') || {}) as Settings;
     settings.autoLaunch = !!data.autoLaunch;
     store.set('settings', settings);
-    // @TODO: auto launch
+    if (settings.autoLaunch) {
+      autoLauncher.enable();
+    } else {
+      autoLauncher.disable();
+    }
     return { autoLaunch: !!data.autoLaunch };
   }
 );

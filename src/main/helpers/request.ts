@@ -1,5 +1,5 @@
 import axios from 'axios';
-import HttpsProxyAgent from 'https-proxy-agent';
+import createHttpsProxyAgent from 'https-proxy-agent';
 
 const proxy =
   process.env.http_proxy || process.env.https_proxy || process.env.HTTPS_PROXY;
@@ -7,8 +7,7 @@ const proxy =
 const instance = proxy
   ? axios.create({
       proxy: false,
-      // @ts-ignore
-      httpsAgent: new HttpsProxyAgent(proxy)
+      httpsAgent: createHttpsProxyAgent(proxy)
     })
   : axios;
 

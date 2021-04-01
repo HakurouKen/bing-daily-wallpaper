@@ -1,7 +1,6 @@
 import { request as baseRequest } from '../promisify-ipc-renderer';
 
 import {
-  Settings,
   SetAutoLaunchRequest,
   SetAutoLaunchResponse,
   SetDailyUpdateTimeRequest,

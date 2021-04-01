@@ -27,7 +27,7 @@ export default function createWindow(
 ) {
   const windowOptions = merge({}, DEFAULT_WINDOW_OPTIONS, options);
 
-  let windowState = windowStateKeeper({
+  const windowState = windowStateKeeper({
     defaultWidth: windowOptions.minWidth,
     defaultHeight: windowOptions.minHeight
   });

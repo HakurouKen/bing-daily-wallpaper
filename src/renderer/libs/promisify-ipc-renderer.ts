@@ -1,5 +1,6 @@
 import { IpcRendererEvent } from 'electron';
 // @Hack: Use `require` to skip vite bundle.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = require('electron');
 
 function uuidV4() {
@@ -30,7 +31,13 @@ type IpcCallbackItem = {
 };
 
 const listeners: {
-  [key: string]: { callbacks: IpcCallbackItem[]; listener: Function };
+  [key: string]: {
+    callbacks: IpcCallbackItem[];
+    listener: (
+      event: Electron.IpcRendererEvent,
+      response: { id: string; error: Error | null; data: any }
+    ) => void;
+  };
 } = {};
 
 function callbackResolve(
@@ -74,9 +81,18 @@ function addListener(channel: string) {
   return listener;
 }
 
-function request(channel: string, data?: any, timeout: number = 3000) {
-  let _resolve: (value: any) => void = () => {};
-  let _reject: (reason?: Error) => void = () => {};
+type RequestResolver = Promise<{
+  id: string;
+  event: IpcRendererEvent;
+  data: any;
+}>;
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
+function request(channel: string, data?: any, timeout = 3000): RequestResolver {
+  let _resolve: (value: any) => void = noop;
+  let _reject: (reason?: Error) => void = noop;
   const done = new Promise((resolve, reject) => {
     _resolve = resolve;
     _reject = reject;
@@ -102,7 +118,7 @@ function request(channel: string, data?: any, timeout: number = 3000) {
     }, timeout);
   }
   ipcRenderer.send(`promisify:${channel}`, { id, data });
-  return done as Promise<{ id: string; event: IpcRendererEvent; data: any }>;
+  return done as RequestResolver;
 }
 
 export { request };

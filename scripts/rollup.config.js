@@ -12,7 +12,7 @@ module.exports = {
     file: path.join(__dirname, '../dist/main/index.js'),
     format: 'cjs',
     name: packageJson.name,
-    sourcemap: true,
+    sourcemap: true
   },
   plugins: [
     nodeExternals(),
@@ -27,19 +27,19 @@ module.exports = {
       jsxFactory: 'h',
       jsxFragment: 'Fragment',
       define: {
-        __VERSION__: '"x.y.z"',
+        __VERSION__: '"x.y.z"'
       },
       loaders: {
         '.json': 'json',
-        '.js': 'jsx',
-      },
+        '.js': 'jsx'
+      }
     }),
     alias({
-      entries: [{ find: '@', replacement: path.join(__dirname, '../src') }],
-    }),
+      entries: [{ find: '@', replacement: path.join(__dirname, '../src') }]
+    })
   ],
   external: [
     ...Object.keys(packageJson.dependencies || {}),
-    ...Object.keys(packageJson.devDependencies || {}),
-  ],
+    ...Object.keys(packageJson.devDependencies || {})
+  ]
 };

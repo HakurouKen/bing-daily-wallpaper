@@ -14,5 +14,8 @@ module.exports = {
     'prettier',
     'plugin:prettier/recommended'
   ],
-  rules: {}
+  rules: {
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
+  }
 };

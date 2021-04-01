@@ -17,7 +17,7 @@ module.exports = defineConfig({
   },
   resolve: {
     alias: {
-      '@': root
+      '@': path.join(__dirname, '..', 'src')
     }
   },
   plugins: [vue()],

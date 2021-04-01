@@ -10,8 +10,8 @@
     "build": "cross-env NODE_ENV=production npm run build:renderer && npm run build:main",
     "build:renderer": "vite build --base=./",
     "build:main": "node scripts/build.js && electron-builder build",
-    "lint": "eslint src/**/*.{js,vue,ts}",
-    "lint:fix": "eslint src/**/*.{js,vue,ts} --fix",
+    "lint": "eslint src/**/*.{vue,ts}",
+    "lint:fix": "eslint src/**/*.{vue,ts} --fix",
     "postinstall": "install-app-deps"
   },
   "dependencies": {
