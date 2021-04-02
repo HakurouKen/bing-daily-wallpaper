@@ -60,6 +60,11 @@ const menuItemUpdateWallpaper = new MenuItem({
   click: updateWallpaperNow
 });
 
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+}
+
 app.whenReady().then(() => {
   tray = new Tray(app.getAppPath() + '/favicon.ico');
   const contextMenu = Menu.buildFromTemplate([
