@@ -22,10 +22,6 @@ module.exports = defineConfig({
   },
   plugins: [vue()],
   optimizeDeps: {
-    exclude: [
-      'electron-window-state',
-      'electron',
-      ...require('builtin-modules')
-    ]
+    exclude: ['electron', ...require('builtin-modules')]
   }
 });

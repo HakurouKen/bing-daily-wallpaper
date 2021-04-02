@@ -8,7 +8,7 @@
     "dev:renderer": "vite --config=scripts/vite.config.js",
     "dev:main": "node scripts/dev.js",
     "build": "cross-env NODE_ENV=production npm run build:renderer && npm run build:main",
-    "build:renderer": "vite build --base=./",
+    "build:renderer": "vite build --config=scripts/vite.config.js",
     "build:main": "node scripts/build.js && electron-builder build",
     "lint": "eslint src/**/*.{vue,ts}",
     "lint:fix": "eslint src/**/*.{vue,ts} --fix",
@@ -79,13 +79,5 @@
     "vite",
     "tailwind"
   ],
-  "main": "dist/main/index.js",
-  "build": {
-    "directories": {
-      "output": "build"
-    },
-    "mac": {
-      "target": "dmg"
-    }
-  }
+  "main": "dist/main/index.js"
 }

@@ -1,0 +1,9 @@
+appId: 'com.leroy.bing-daily-wallpaper'
+directories:
+  output: 'build'
+win:
+  target: 'portable'
+  icon: 'icons/wallpaper.ico'
+mac:
+  target: 'dmg'
+  icon: 'icons/wallpaper.icns'
