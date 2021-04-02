@@ -16,7 +16,7 @@ function setup(timeExpression: string, func: () => void) {
     throw new Error(`Invalid cron expression: ${cronExpression}`);
   }
   if (job) {
-    job.reschedule(timeExpression);
+    job.reschedule(cronExpression);
   } else {
     job = schedule.scheduleJob(cronExpression, func);
   }
