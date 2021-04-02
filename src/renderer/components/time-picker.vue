@@ -27,6 +27,8 @@
 </template>
 
 <script lang="ts">
+// A temporary fork of element-plus `ElTimeSelect`.
+// See https://github.com/element-plus/element-plus/issues/1724
 import { defineComponent, computed } from 'vue';
 
 interface Time {
