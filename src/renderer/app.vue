@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { get, setAutoLaunch, setDailyUpdateTime } from './libs/apis/settings';
-import TimeSelect from './components/time-picker.vue';
+import TimeSelect from './components/time-select.vue';
 
 export default defineComponent({
   name: 'App',
