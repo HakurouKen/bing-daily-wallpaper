@@ -5,8 +5,11 @@ import windowStateKeeper from 'electron-window-state';
 const isDev = !app.isPackaged;
 
 const DEFAULT_WINDOW_OPTIONS = {
-  minWidth: 800,
-  minHeight: 600,
+  width: 400,
+  height: 300,
+  resizable: isDev,
+  minimizable: false,
+  maximizable: false,
   titleBarStyle: 'hidden',
   autoHideMenuBar: true,
   trafficLightPosition: {
@@ -28,16 +31,16 @@ export default function createWindow(
   const windowOptions = merge({}, DEFAULT_WINDOW_OPTIONS, options);
 
   const windowState = windowStateKeeper({
-    defaultWidth: windowOptions.minWidth,
-    defaultHeight: windowOptions.minHeight
+    defaultWidth: windowOptions.width,
+    defaultHeight: windowOptions.height
   });
 
   const win: BrowserWindow = new BrowserWindow({
     ...windowOptions,
     x: windowState.x,
     y: windowState.y,
-    width: windowState.width,
-    height: windowState.height
+    width: isDev ? windowState.width : windowOptions.width,
+    height: isDev ? windowState.height : windowOptions.height
   });
 
   windowState.manage(win);
