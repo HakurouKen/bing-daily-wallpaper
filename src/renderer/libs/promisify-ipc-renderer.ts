@@ -1,7 +1,13 @@
 import { IpcRendererEvent } from 'electron';
+import { Logger, LOG_LEVEL } from './logger';
 // @Hack: Use `require` to skip vite bundle.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = require('electron');
+
+const logger = new Logger(
+  'api',
+  process.env.NODE_ENV === 'production' ? LOG_LEVEL.ERROR : LOG_LEVEL.DEBUG
+);
 
 function uuidV4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -74,6 +80,7 @@ function addListener(channel: string) {
     event: Electron.IpcRendererEvent,
     response: { id: string; error: Error | null; data: any }
   ) => {
+    logger.info('response:', channel, response);
     callbackResolve(channel, event, response);
   };
   listeners[channel] = { listener, callbacks: [] };
@@ -97,6 +104,7 @@ function request(channel: string, data?: any, timeout = 3000): RequestResolver {
     _resolve = resolve;
     _reject = reject;
   });
+  logger.info('request:', channel, data);
   const id = uuidV4();
   if (!listeners[channel]) {
     addListener(channel);
