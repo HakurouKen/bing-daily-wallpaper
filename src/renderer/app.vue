@@ -1,55 +1,74 @@
 <template>
-  <el-container>
-    <el-main v-loading="loading">
-      <el-row type="flex" class="row-bg" justify="center">
-        <el-col :span="12">
-          <el-form ref="form" :model="settings" label-width="120px">
-            <el-form-item label="每日更新时间">
-              <TimeSelect
-                v-model="settings.dailyUpdateTime"
-                placeholder="更新时间"
-                start="00:15"
-                end="23:45"
-                step="00:15"
-              />
-            </el-form-item>
-            <el-form-item label="开机自动启动">
-              <el-switch v-model="settings.autoLaunch" />
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+  <div id="app">
+    <el-form
+      v-loading="loading"
+      class="setting-form"
+      :model="settings"
+      label-width="120px"
+    >
+      <el-form-item label="每日更新时间">
+        <TimePicker
+          v-model="settings.dailyUpdateTime"
+          @blur="updateDailyUpdateTime"
+          placeholder="更新时间"
+          format="HH:mm"
+        />
+      </el-form-item>
+      <el-form-item label="开机自动启动">
+        <el-switch v-model="settings.autoLaunch" />
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onBeforeMount, reactive, ref, watch } from 'vue';
 import { get, setAutoLaunch, setDailyUpdateTime } from './libs/apis/settings';
-import TimeSelect from './components/time-select.vue';
+import TimePicker from './components/time-picker.vue';
 
 export default defineComponent({
   name: 'App',
-  components: { TimeSelect },
-  data() {
+  components: { TimePicker },
+  setup() {
+    let loading = ref(false);
+    const settings = reactive({
+      autoLaunch: false,
+      dailyUpdateTime: ''
+    });
+
+    watch(
+      () => settings.autoLaunch,
+      (v) => setAutoLaunch({ autoLaunch: v })
+    );
+    const updateDailyUpdateTime = () =>
+      setDailyUpdateTime({ dailyUpdateTime: settings.dailyUpdateTime });
+
+    onBeforeMount(async () => {
+      loading.value = true;
+      const { autoLaunch, dailyUpdateTime } = await get(null);
+      settings.autoLaunch = autoLaunch;
+      settings.dailyUpdateTime = dailyUpdateTime;
+      loading.value = false;
+    });
+
     return {
-      loading: false,
-      settings: { autoLaunch: false, dailyUpdateTime: '' }
+      loading,
+      settings,
+      updateDailyUpdateTime
     };
-  },
-  watch: {
-    'settings.autoLaunch'(v) {
-      setAutoLaunch({ autoLaunch: v });
-    },
-    'settings.dailyUpdateTime'(v) {
-      setDailyUpdateTime({ dailyUpdateTime: v });
-    }
-  },
-  async created() {
-    this.loading = true;
-    const settings = await get(null);
-    this.settings = settings;
-    this.loading = false;
   }
 });
 </script>
+
+<style scoped>
+#app {
+  height: 100%;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.setting-form {
+  margin-top: 30px;
+}
+</style>
