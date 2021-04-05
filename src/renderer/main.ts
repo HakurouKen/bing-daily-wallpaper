@@ -8,4 +8,7 @@ import ElementPlus from 'element-plus';
 import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale/lang/zh-cn';
 
-createApp(App).use(ElementPlus, { locale }).mount('#app');
+const app = createApp(App);
+
+app.use(ElementPlus, { locale });
+app.mount('#app');
