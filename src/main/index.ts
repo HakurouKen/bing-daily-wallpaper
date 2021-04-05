@@ -66,7 +66,7 @@ if (!gotTheLock) {
 }
 
 app.whenReady().then(() => {
-  tray = new Tray(app.getAppPath() + '/favicon.ico');
+  tray = new Tray(app.getAppPath() + '/icons/wallpaper.ico');
   const contextMenu = Menu.buildFromTemplate([
     { label: '打开设置', type: 'normal', click: () => createMainWindow() },
     menuItemUpdateWallpaper,
